@@ -44,7 +44,8 @@ jobs:
       - checkout
       - *restore_cache
       - run: 
-        name:yarn build:production
+          name: Build production
+          command: yarn build:production
       - *save_cache
 
   deploy-job:
@@ -57,7 +58,7 @@ jobs:
           name: Install dependecies
           command: yarn install
       - run:
-          name : Intall fucntion dependencies
+          name: Intall fucntion dependencies
           command: cd functions && yarn install
       - run:
           name: Deploy Master to Firebase
