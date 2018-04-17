@@ -67,10 +67,10 @@ jobs:
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN -P default
       - *save_cache
       - *persist_functions_workspace
+
 workflows:
       version: 2
-      
-      -deploy:
+      workflow:
         jobs:
           - build-job
           - deploy-job:
