@@ -7,10 +7,7 @@ references:
 
   ## Cache
   cache_key: &cache_key
-    key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "functions/package.json" }}
-    # fallback to using the latest cache if no exact match is found
-    - v1-dependencies-
-
+    key: cache-{{ checksum "package.json" }}-{{ checksum "functions/package.json" }}
   restore_cache: &restore_cache
     restore_cache:
       <<: *cache_key
