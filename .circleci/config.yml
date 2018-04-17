@@ -1,0 +1,81 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+references:
+
+  ## Cache
+  cache_key: &cache_key
+    key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "functions/package.json" }}
+    # fallback to using the latest cache if no exact match is found
+    - v1-dependencies-
+
+  restore_cache: &restore_cache
+    restore_cache:
+      <<: *cache_key
+  save_cache: &save_cache
+    save_cache:
+      <<: *cache_key
+      paths:
+        - node_modules
+        - functions/node_modules
+
+  ## Workspace
+  workspace: &workspace
+    ~/repo
+  attach_functions_workspace: &attach_functions_workspace
+    attach_workspace:
+      at: *workspace
+  persist_functions_workspace: &persist_functions_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - functions
+
+  ##Docker image config
+  node_config: &node_config
+    workin_directory: *workspace
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+jobs:
+  build-job:
+    ##Dump the node config here
+    <<: *node_config
+    steps:
+      - checkout
+      - *restore_cache
+      - run: 
+        name:yarn build:production
+      - *save_cache
+
+  deploy-job:
+    ##Dump the node config here
+    <<: *node_config
+    steps:
+      - checkout
+      - *restore_cache
+      - run: 
+          name: Install dependecies
+          command: yarn install
+      - run:
+          name : Intall fucntion dependencies
+          command: cd functions && yarn install
+      - run:
+          name: Deploy Master to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN -P default
+      - *save_cache
+      - *persist_functions_workspace
+workflows:
+      version: 2
+      
+      -deploy:
+        jobs:
+          - build-job
+          - deploy-job:
+              requires:
+                - build-job
+              filters:
+                branches:
+                  only: master

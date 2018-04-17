@@ -20,7 +20,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdo",
     "eject": "react-scripts eject",
-    "deploy:production":"REACT_APP_DIST_ENV=production yarn build && firebase deploy -P default",
-    "deploy:staging":"REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
+    "deploy:production": "REACT_APP_DIST_ENV=production yarn build",
+    "deploy:production": "REACT_APP_DIST_ENV=production yarn build && firebase deploy -P default",
+    "deploy:staging": "REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
+  },
+  "devDependencies": {
+    "firebase-tools": "^3.18.4"
   }
 }
