@@ -77,18 +77,15 @@ jobs:
           name: yarn build
           command: |
             if [ "${CIRCLE_BRANCH}" == "dev" ]; then
-              CI=true REACT_APP_DIST_ENV=stagin yarn build
+              CI=true DIST_ENV=stagin yarn build
             elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-              CI=true REACT_APP_DIST_ENV=production yarn build
+              CI=true DIST_ENV=production yarn build
             else
               echo "This failed miserably!"
             fi
       - persist_to_workspace:
           root: .
-          paths: 
-            - node_modules
-            - build
-            - functions/node_modules
+          paths: .
   deployment:
     docker:
       - image: circleci/node:latest
@@ -118,14 +115,14 @@ workflows:
       - test_and_report:
           requires:
             - checkout_code
-      # - build:
-      #     requires:
-      #       - checkout_code
-      #     filters:
-      #       branches:
-      #         only:
-      #           - dev
-      #           - master
+      - build:
+          requires:
+            - checkout_code
+          filters:
+            branches:
+              only:
+                - dev
+                - master
       # - deployment:
       #     requires:
       #       - check_vulnerabilities
