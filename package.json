@@ -19,6 +19,7 @@
     "start": "REACT_APP_DIST_ENV=staging  react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --bail --env=jsdom --runInBand",
+    "reportCoverage": "codecov",
     "test:config": "yarn test --showConfig",
     "test:coverage": "yarn test --coverage --silent --updateSnapshot",
     "validate:dependencies": "nsp check",
@@ -28,6 +29,7 @@
     "deploy:staging": "REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
   },
   "devDependencies": {
+    "codecov": "^3.0.0",
     "firebase-tools": "^3.18.4",
     "nsp": "^3.2.1"
   }
