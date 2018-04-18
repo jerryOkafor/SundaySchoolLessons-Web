@@ -17,15 +17,17 @@
   "scripts": {
     "start": "REACT_APP_DIST_ENV=staging  react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --bail --env=jsdom --runInBand",
+    "test:config": "yarn test --showConfig",
+    "test:coverage": "yarn test --coverage --silent --updateSnapshot",
+    "validate:dependencies": "nsp check",
     "eject": "react-scripts eject",
     "build:production": "REACT_APP_DIST_ENV=production yarn build",
-    "deploy:production":
-      "REACT_APP_DIST_ENV=production yarn build && firebase deploy -P default",
-    "deploy:staging":
-      "REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
+    "deploy:production": "REACT_APP_DIST_ENV=production yarn build && firebase deploy -P default",
+    "deploy:staging":"REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
   },
   "devDependencies": {
-    "firebase-tools": "^3.18.4"
+    "firebase-tools": "^3.18.4",
+    "nsp": "^3.2.1"
   }
 }
