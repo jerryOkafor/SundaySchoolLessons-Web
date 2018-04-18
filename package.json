@@ -5,6 +5,7 @@
   "dependencies": {
     "firebase": "4.11.0",
     "firebaseui": "^2.6.2",
+    "hoek": "^5.0.3",
     "immutability-helper": "^2.6.6",
     "latinize": "^0.2.0",
     "material-ui": "^0.20.0",
@@ -24,7 +25,7 @@
     "eject": "react-scripts eject",
     "build:production": "REACT_APP_DIST_ENV=production yarn build",
     "deploy:production": "REACT_APP_DIST_ENV=production yarn build && firebase deploy -P default",
-    "deploy:staging":"REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
+    "deploy:staging": "REACT_APP_DIST_ENV=staging yarn build && firebase deploy -P staging"
   },
   "devDependencies": {
     "firebase-tools": "^3.18.4",
