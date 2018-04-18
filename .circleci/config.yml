@@ -24,10 +24,8 @@ jobs:
           paths: node_modules
       - persist_to_workspace:
           root: ssl
-          paths: 
-            - node_modules
-            - build
-            - functions/node_modules
+          ## Save every thing in this folder
+          paths: .
 
   check_vulnerabilities:
       docker:
