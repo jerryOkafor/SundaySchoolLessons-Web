@@ -10,7 +10,6 @@ jobs:
     working_directory: ~/ssl
     steps:
       - checkout
-      - run: mkdir -p ssl
       - attach_workspace:
           at: ~/ssl
       - restore_cache:
@@ -23,7 +22,7 @@ jobs:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "functions/yarn.lock"}}
           paths: node_modules
       - persist_to_workspace:
-          root: ssl
+          root: .
           ## Save every thing in this folder
           paths: .
 
@@ -116,24 +115,24 @@ workflows:
       - check_vulnerabilities:
           requires:
             - checkout_code
-      - test_and_report:
-          requires:
-            - checkout_code
-      - build:
-          requires:
-            - checkout_code
-          filters:
-            branches:
-              only:
-                - dev
-                - master
-      - deployment:
-          requires:
-            - check_vulnerabilities
-            - test_and_report
-            - build
-          filters:
-            branches:
-              only:
-                - dev
-                - master
+      # - test_and_report:
+      #     requires:
+      #       - checkout_code
+      # - build:
+      #     requires:
+      #       - checkout_code
+      #     filters:
+      #       branches:
+      #         only:
+      #           - dev
+      #           - master
+      # - deployment:
+      #     requires:
+      #       - check_vulnerabilities
+      #       - test_and_report
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - dev
+      #           - master
