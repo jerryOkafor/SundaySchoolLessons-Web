@@ -112,12 +112,12 @@ workflows:
   test_build_deploy:
     jobs:
       - checkout_code
-      - check_vulnerabilities:
-          requires:
-            - checkout_code
-      # - test_and_report:
+      # - check_vulnerabilities:
       #     requires:
       #       - checkout_code
+      - test_and_report:
+          requires:
+            - checkout_code
       # - build:
       #     requires:
       #       - checkout_code
