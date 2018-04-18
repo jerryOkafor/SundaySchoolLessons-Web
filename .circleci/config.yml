@@ -7,11 +7,12 @@ jobs:
   checkout_code:
     docker:
       - image: circleci/node:latest
-    working_directory: ~/SundaySchoolLessons-Web
+    working_directory: ~/ssl
     steps:
       - checkout
+      - run: mkdir -p ssl
       - attach_workspace:
-          at: ~/SundaySchoolLessons-Web
+          at: ~/ssl
       - restore_cache:
           keys:
             - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "functions/yarn.lock"}}
@@ -22,7 +23,7 @@ jobs:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "functions/yarn.lock"}}
           paths: node_modules
       - persist_to_workspace:
-          root: .
+          root: ssl
           paths: 
             - node_modules
             - build
@@ -31,10 +32,10 @@ jobs:
   check_vulnerabilities:
       docker:
         - image: circleci/node:latest
-      working_directory: ~/SundaySchoolLessons-Web
+      working_directory: ~/ssl
       steps:
         - attach_workspace:
-            at: ~/SundaySchoolLessons-Web
+            at: ~/ssl
         - run: yarn install
         - run: |
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
@@ -46,10 +47,10 @@ jobs:
   test_and_report:
     docker:
       - image: circleci/node:latest
-    working_directory: ~/SundaySchoolLessons-Web
+    working_directory: ~/ssl
     steps:
       - attach_workspace:
-          at: ~/SundaySchoolLessons-Web
+          at: ~/ssl
       - run: yarn install
       - run: CI=true yarn test:coverage
       - run: yarn reportCoverage
@@ -65,10 +66,10 @@ jobs:
   build:
     docker:
       - image: circleci/node:latest
-    working_directory: ~/SundaySchoolLessons-Web
+    working_directory: ~/ssl
     steps:
       - attach_workspace:
-          at: ~/SundaySchoolLessons-Web
+          at: ~/ssl
       - run:
           name: Install react dependencies
           command: yarn install
@@ -94,10 +95,10 @@ jobs:
   deployment:
     docker:
       - image: circleci/node:latest
-    working_directory: ~/SundaySchoolLessons-Web
+    working_directory: ~/ssl
     steps:
       - attach_workspace:
-          at: ~/SundaySchoolLessons-Web
+          at: ~/ssl
       - run: yarn install
       - deploy:
           name: Deploy & Alias.
