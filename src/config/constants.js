@@ -41,7 +41,7 @@ export const firebaseDb =
     : firebase.database().ref();
 export const fireStoreDb =
   appEnv === 'staging'
-    ? firebase.firestore().collection(APP_ID)
-    : firebase.firestore();
+    ? firestore.collection(APP_ID)
+    : firestore.firestore();
 export const firebaseAuth = firebase.auth();
 export const firebaseUI = new firebaseui.auth.AuthUI(firebaseAuth);

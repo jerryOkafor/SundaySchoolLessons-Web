@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../logo.png';
+// import logo from '../logo.png';
 import avatar from '../images/silhouette.jpg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -9,7 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import { Route, BrowserRouter, Link, Redirect, Switch } from 'react-router-dom';
 import { firebaseAuth } from '../config/constants';
-import registerServiceWorker from '../registerServiceWorker';
+// import registerServiceWorker from '../registerServiceWorker';
 import Login from './login/Login';
 import Home from './home/Home';
 import NewLesson from './newlesson/NewLesson';

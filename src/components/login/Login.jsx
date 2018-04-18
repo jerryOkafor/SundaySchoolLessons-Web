@@ -1,19 +1,14 @@
-import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
-import logo from '../../logo.png'
-import './Login.css'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../logo.png';
+import './Login.css';
 import { firebaseUI } from '../../config/constants';
 import { uiConfig } from '../../config/constants';
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-
-  }
-
-  componentDidMount(){
+  componentDidMount() {
     //   console.log(this)
-      firebaseUI.start('#firebaseui-auth-container',uiConfig)
+    firebaseUI.start('#firebaseui-auth-container', uiConfig);
   }
   render() {
     return (
@@ -21,7 +16,11 @@ class Login extends Component {
         id="page-splash"
         ref={splashPage => (this.splashPage = splashPage)}
       >
-        <img src={logo} style={{ width: 150 + 'px', height: 150 + 'px' }} />
+        <img
+          src={logo}
+          alt="This is the logo"
+          style={{ width: 150 + 'px', height: 150 + 'px' }}
+        />
         <h3
           className="fp-logo"
           style={{
@@ -37,7 +36,7 @@ class Login extends Component {
           Singing in the Shadow of the Wings of God
         </div>
         <div>
-          <div id="firebaseui-auth-container"/>
+          <div id="firebaseui-auth-container" />
           <Link className="fp-skip" to="/home">
             skip sign in
           </Link>
@@ -47,4 +46,4 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default Login;

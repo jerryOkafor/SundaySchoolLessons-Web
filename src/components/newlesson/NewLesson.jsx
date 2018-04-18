@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Swal from 'sweetalert2';
 import DatePicker from 'material-ui/DatePicker';
-import { firebaseDb, fireStoreDb,appEnv } from './../../config/constants';
+import { firebaseDb, fireStoreDb, appEnv } from './../../config/constants';
 import './NewLesson.css';
 
 import update from 'immutability-helper';
@@ -115,7 +115,9 @@ class NewLesson extends Component {
     this.handleDateChange = this.handleDateChange.bind(this);
 
     //init db
-    this.lessonRef = firebaseDb.child(`${appEnv=="staging"?"":"v1"}/sessions`);
+    this.lessonRef = firebaseDb.child(
+      `${appEnv === 'staging' ? '' : 'v1'}/sessions`
+    );
     this.fireStoreRef = fireStoreDb.doc('lessons');
   }
 
@@ -157,6 +159,7 @@ class NewLesson extends Component {
         objectives: { $set: objectives },
       },
     });
+    this.setState(newState);
   };
 
   handleStudiesChange = event => {
@@ -172,7 +175,7 @@ class NewLesson extends Component {
 
     //get the outline too for title change
     var outlines = this.state.lesson.outLine;
-    if (field == 'title') {
+    if (field === 'title') {
       outlines[parent].items[child] = content;
     }
 
@@ -215,15 +218,19 @@ class NewLesson extends Component {
     //go ahead and submit the lessons to
     //firebase
     var currentSession = 0;
-    var sessionRef = firebaseDb.child(`${appEnv=="staging"?"":"v1"}/sessions`);
+    var sessionRef = firebaseDb.child(
+      `${appEnv === 'staging' ? '' : 'v1'}/sessions`
+    );
     sessionRef.once('value').then(dataSnapshot => {
       dataSnapshot.forEach(data => {
-        if (data.val() == true) {
+        if (data.val() === true) {
           currentSession = data.key;
 
-          var lessonRef = firebaseDb.child(`${appEnv=="staging"?"":"v1"}/lessons/${currentSession}`); //todo change dev to v1
+          var lessonRef = firebaseDb.child(
+            `${appEnv === 'staging' ? '' : 'v1'}/lessons/${currentSession}`
+          ); //todo change dev to v1
           var lessonListRef = firebaseDb.child(
-            `${appEnv=="staging"?"":"v1"}/lessonsList/${currentSession}`
+            `${appEnv === 'staging' ? '' : 'v1'}/lessonsList/${currentSession}`
           ); //
 
           var newLessonNumber = 0;
@@ -251,7 +258,7 @@ class NewLesson extends Component {
             lessonItem.lessonNumber = newLessonNumber;
             lessonItem.lessonId = newLessonRef.key;
 
-            console.log("Lesson: ",lessonItem,"LessonsLit: ",lessonListItem)
+            console.log('Lesson: ', lessonItem, 'LessonsLit: ', lessonListItem);
             Swal({
               title: 'Confirm!!!',
               text: 'Are u sure yo want to submit this lesson!',
