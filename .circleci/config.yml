@@ -112,9 +112,9 @@ workflows:
       # - check_vulnerabilities:
       #     requires:
       #       - checkout_code
-      - test_and_report:
-          requires:
-            - checkout_code
+      # - test_and_report:
+      #     requires:
+      #       - checkout_code
       - build:
           requires:
             - checkout_code
@@ -123,13 +123,13 @@ workflows:
               only:
                 - dev
                 - master
-      # - deployment:
-      #     requires:
-      #       - check_vulnerabilities
-      #       - test_and_report
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - dev
-      #           - master
+      - deployment:
+          requires:
+            # - check_vulnerabilities
+            # - test_and_report
+            - build
+          filters:
+            branches:
+              only:
+                - dev
+                - master
