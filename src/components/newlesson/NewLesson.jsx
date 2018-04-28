@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Swal from 'sweetalert2';
 import DatePicker from 'material-ui/DatePicker';
-import { firebaseDb, fireStoreDb, appEnv } from './../../config/constants';
+import { firebaseDb, appEnv } from './../../config/constants';
 import './NewLesson.css';
 
 import update from 'immutability-helper';
@@ -118,7 +118,7 @@ class NewLesson extends Component {
     this.lessonRef = firebaseDb.child(
       `${appEnv === 'staging' ? '' : 'v1'}/sessions`
     );
-    this.fireStoreRef = fireStoreDb.doc('lessons');
+    // this.fireStoreRef = fireStoreDb.doc('lessons');
   }
 
   handleChange = event => {
