@@ -1,0 +1,9 @@
+{
+  "name": "utils",
+  "scripts": {},
+  "dependencies": {
+    "firebase-admin": "~5.12.1",
+    "firebase-functions": "^1.0.3"
+  },
+  "private": true
+}
