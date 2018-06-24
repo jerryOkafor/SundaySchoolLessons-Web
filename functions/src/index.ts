@@ -16,6 +16,6 @@ export const firestoreInstance = admin.firestore()
 
 export const newReaderAdded = functions.firestore
     .document(`${BOOKS_COLLECTION}/{sessionId}/${LESSONS_COLLECTION}/{lessonId}/${READERS_COLLECTION}/{docId}`)
-    .onCreate(event => {
-        return actions.updateReadersCount(event)
+    .onCreate((snap, context) => {
+        return actions.updateReadersCount(snap, context)
     })
