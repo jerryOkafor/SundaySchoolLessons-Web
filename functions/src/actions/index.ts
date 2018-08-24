@@ -1,9 +1,9 @@
 //for email templates
-const nunjucks = require('nunjucks');
+import nunjucks = require('nunjucks');
 nunjucks.configure({ autoescape: true });
 
 //get the  node mailer
-const nodeMailer = require('nodemailer');
+import nodeMailer = require('nodemailer');
 
 import { BOOKS_COLLECTION, LESSONS_COLLECTION, READERS_COLLECTION } from "../Constants"
 
