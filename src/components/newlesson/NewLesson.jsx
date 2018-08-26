@@ -26,7 +26,7 @@ import DatePicker from '../custom/DatePicker';
 import Swal from 'sweetalert2';
 import './NewLesson.css';
 import { fireStoreDb } from '../../config';
-import { BOOKS_COLLECTION, LESSONS_COLLECTION } from './../../utils'
+import { BOOKS_COLLECTION, LESSONS_COLLECTION, CURRENT_SESSION, SESSIONS_COLLECTON } from './../../utils'
 import update from 'immutability-helper';
 
 const styles = theme => ({
@@ -76,8 +76,8 @@ class NewLesson extends Component {
         focus: '',
         html: '',
         memoryVerse: '',
-        number: 1,
-        session: '',
+        number: 0,
+        session: CURRENT_SESSION(),
         text: '',
         timestamp: new Date(),
         topic: ''
@@ -88,8 +88,23 @@ class NewLesson extends Component {
     this.handleLessonUpload = this.handleLessonUpload.bind(this)
     this.handleBadgeOnclick = this.handleBadgeOnclick.bind(this)
     this.fetchNexLessonNumber = this.fetchNexLessonNumber.bind(this)
+    this.createSession = this.createSession.bind(this)
+
+    //fetch the next lesson number immediatlry
+    this.fetchNexLessonNumber(this.state.lesson.session)
   }
 
+  createSession = (session, setDefault) => {
+    fireStoreDb.collection(SESSIONS_COLLECTON)
+      .doc()
+      .set({
+        name: session,
+        default: setDefault
+      })
+      .then(() => {
+        console.log("New Session created Successfully: ", session)
+      })
+  }
   handleDialogClose = () => {
     this.setState({ dialogOpen: false });
   };
@@ -137,25 +152,20 @@ class NewLesson extends Component {
     console.log("Lessons: ", this.state.lesson)
   }
   componentDidMount() {
-    fireStoreDb.doc("Books/201801/Lessons/DrAK2BBDceoadF63zd8L")
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          console.log("Document data:", doc.data());
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-      })
-      .catch(error => {
-        console.log("Error getting document: ", error)
-      })
     let sessionSubscription = fireStoreDb
-      .collection(BOOKS_COLLECTION)
-      .onSnapshot(onSnapshot => {
-        let sessions = onSnapshot.docChanges().map(session => session.doc.id)
+      .collection(SESSIONS_COLLECTON)
+      .onSnapshot(querySnapshot => {
+        let sessions = []
+        querySnapshot.forEach((doc) => {
+          console.log("Doc: ", doc.data().name)
+          sessions.push(doc.data().name)
+        })
         console.log("Sessions: ", sessions)
         this.setState({ sessions: sessions })
+        if (!sessions.includes(CURRENT_SESSION())) {
+          //create and set a new state as the current state
+          this.createSession(CURRENT_SESSION(), true)
+        }
       })
 
     this.registrations.push(sessionSubscription)
