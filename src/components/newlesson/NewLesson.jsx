@@ -101,9 +101,27 @@ class NewLesson extends Component {
     this.fetchNexLessonNumber = this.fetchNexLessonNumber.bind(this)
     this.createSession = this.createSession.bind(this)
     this.handleSnackClose = this.handleSnackClose.bind(this)
+    this.resetForm = this.resetForm.bind(this)
 
     //fetch the next lesson number immediatlry
     this.fetchNexLessonNumber(this.state.lesson.session)
+  }
+
+  resetForm = () => {
+    let oldSession = this.state.lesson.session
+    this.setState({
+      lesson: {
+        centralTruth: '',
+        focus: '',
+        html: '',
+        memoryVerse: '',
+        number: 0,
+        session: oldSession,
+        text: '',
+        timestamp: null,
+        topic: ''
+      }
+    })
   }
 
   handleSnackClose = () => {
@@ -267,20 +285,7 @@ class NewLesson extends Component {
           .add(uploadLesson)
           .then((docRef) => {
             console.log("Document written to: ", docRef.id)
-            this.setState({
-              lesson: {
-                centralTruth: '',
-                focus: '',
-                html: '',
-                memoryVerse: '',
-                number: 0,
-                session: CURRENT_SESSION(),
-                text: '',
-                timestamp: new Date(),
-                topic: ''
-              }
-            })
-
+            this.resetForm()
             this.fetchNexLessonNumber(this.state.lesson.session)
 
           }).catch(error => {
@@ -355,6 +360,7 @@ class NewLesson extends Component {
               <FormControl className={classes.formControl}>
                 <DatePicker
                   name="timestamp"
+                  value={this.state.lesson.timestamp}
                   onChange={this.handleChange}
                   label="Lesson Date" />
               </FormControl>
@@ -365,6 +371,7 @@ class NewLesson extends Component {
                 className={classes.formControl} >
                 <TextField
                   name="topic"
+                  value={this.state.lesson.topic}
                   onChange={this.handleChange}
                   fullWidth
                   label="Lesson Topic" />
@@ -376,8 +383,11 @@ class NewLesson extends Component {
                 className={classes.formControl} >
                 <TextField
                   name="memoryVerse"
+                  value={this.state.lesson.memoryVerse}
                   onChange={this.handleChange}
                   fullWidth
+                  multiline
+                  rows={2}
                   label="Memory Verse" />
               </FormControl>
             </Grid>
@@ -387,6 +397,7 @@ class NewLesson extends Component {
                 className={classes.formControl} >
                 <TextField
                   name="text"
+                  value={this.state.lesson.text}
                   onChange={this.handleChange}
                   fullWidth
                   multiline
@@ -400,6 +411,7 @@ class NewLesson extends Component {
                 className={classes.formControl} >
                 <TextField
                   name="centralTruth"
+                  value={this.state.lesson.centralTruth}
                   onChange={this.handleChange}
                   fullWidth
                   multiline
@@ -413,6 +425,7 @@ class NewLesson extends Component {
                 className={classes.formControl} >
                 <TextField
                   name="focus"
+                  value={this.state.lesson.focus}
                   onChange={this.handleChange}
                   fullWidth
                   multiline
@@ -426,6 +439,7 @@ class NewLesson extends Component {
                 className={classes.formControl} >
                 <TextField
                   name="html"
+                  value={this.state.lesson.html}
                   onChange={this.handleChange}
                   fullWidth
                   multiline
