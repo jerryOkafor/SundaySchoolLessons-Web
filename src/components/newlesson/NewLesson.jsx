@@ -19,6 +19,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+/* Snack */
+import Snackbar from '@material-ui/core/Snackbar'
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
@@ -70,7 +73,15 @@ class NewLesson extends Component {
     this.registrations = []
     this.state = {
       sessions: [],
-      dialogOpen: false,
+      dialog: {
+        open: false,
+      },
+      snack: {
+        open: false,
+        vertical: 'bottom',
+        horizontal: 'left',
+        message: ''
+      },
       lesson: {
         centralTruth: '',
         focus: '',
@@ -79,7 +90,7 @@ class NewLesson extends Component {
         number: 0,
         session: CURRENT_SESSION(),
         text: '',
-        timestamp: new Date(),
+        timestamp: null,
         topic: ''
       }
     }
@@ -89,11 +100,15 @@ class NewLesson extends Component {
     this.handleBadgeOnclick = this.handleBadgeOnclick.bind(this)
     this.fetchNexLessonNumber = this.fetchNexLessonNumber.bind(this)
     this.createSession = this.createSession.bind(this)
+    this.handleSnackClose = this.handleSnackClose.bind(this)
 
     //fetch the next lesson number immediatlry
     this.fetchNexLessonNumber(this.state.lesson.session)
   }
 
+  handleSnackClose = () => {
+    this.setState({ snack: { open: false } })
+  }
   createSession = (session, setDefault) => {
     fireStoreDb.collection(SESSIONS_COLLECTON)
       .doc()
@@ -106,12 +121,12 @@ class NewLesson extends Component {
       })
   }
   handleDialogClose = () => {
-    this.setState({ dialogOpen: false });
+    this.setState({ dialog: { open: false } });
   };
 
   handleBadgeOnclick = event => {
     console.log("Handling Badge ONclick: ", event.target)
-    this.setState({ dialogOpen: this.state.dialogOpen ? false : true })
+    this.setState({ dialog: { open: this.state.dialog.open ? false : true } })
 
   }
 
@@ -147,10 +162,136 @@ class NewLesson extends Component {
       })
   }
 
-  handleLessonUpload = event => {
-    console.log("Handling Lesson Upload Here: ", event.target)
+  handleLessonUpload = () => {
     console.log("Lessons: ", this.state.lesson)
+    const uploadLesson = this.state.lesson
+
+    //do small lessons validation
+    if (!uploadLesson.session) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Session is Required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.timestamp) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Lesson date is required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.topic) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Lesson topic is Required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.memoryVerse) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Lesson Memory verse is Required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.text) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Text  is Required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.centralTruth) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Central truth is Required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.focus) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Focus is Required!"
+        }
+      })
+      return
+    }
+    if (!uploadLesson.html) {
+      this.setState({
+        snack: {
+          ...this.state.snack,
+          open: true,
+          message: "Main lesson content (HTML) is Required!"
+        }
+      })
+      return
+    }
+
+    //if we are here, it means we have every thin working fine.
+    //upload the new lesson.
+    //show swal
+    Swal({
+      title: 'Confirm!!!',
+      text: 'Are u sure yo want to submit this lesson!',
+      type: 'info',
+      showCancelButton: true,
+      showLoaderOnConfirm: true,
+    }).then(result => {
+      if (result.value) {
+        Swal('Good job!', 'Lesson Upload Successful!', 'success');
+
+        fireStoreDb.collection(BOOKS_COLLECTION)
+          .doc(uploadLesson.session)
+          .collection(LESSONS_COLLECTION)
+          .add(uploadLesson)
+          .then((docRef) => {
+            console.log("Document written to: ", docRef.id)
+            this.setState({
+              lesson: {
+                centralTruth: '',
+                focus: '',
+                html: '',
+                memoryVerse: '',
+                number: 0,
+                session: CURRENT_SESSION(),
+                text: '',
+                timestamp: new Date(),
+                topic: ''
+              }
+            })
+
+            this.fetchNexLessonNumber(this.state.lesson.session)
+
+          }).catch(error => {
+            console.log("Error creating a new Lesson.")
+          })
+      }
+    })
+
+
   }
+
   componentDidMount() {
     let sessionSubscription = fireStoreDb
       .collection(SESSIONS_COLLECTON)
@@ -176,6 +317,8 @@ class NewLesson extends Component {
   }
   render() {
     const { classes } = this.props;
+    const { vertical, horizontal, open, message } = this.state.snack;
+
     const sessionsOptions = this.state.sessions.map((s, key) => {
       return <MenuItem key={key} value={s}>{s}</MenuItem>
     })
@@ -302,7 +445,7 @@ class NewLesson extends Component {
         </Paper>
 
         <Dialog
-          open={this.state.dialogOpen}
+          open={this.state.dialog.open}
           onClose={this.handleDialogClose}
           aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Update Lessons Number</DialogTitle>
@@ -328,6 +471,16 @@ class NewLesson extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={open}
+          onClose={this.handleSnack}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{message}</span>}
+        />
 
       </div>
     );
