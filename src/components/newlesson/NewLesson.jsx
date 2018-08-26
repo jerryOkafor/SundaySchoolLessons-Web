@@ -26,7 +26,7 @@ import DatePicker from '../custom/DatePicker';
 import Swal from 'sweetalert2';
 import './NewLesson.css';
 import { fireStoreDb } from '../../config';
-import { BOOKS_COLLECTION } from './../../utils'
+import { BOOKS_COLLECTION, LESSONS_COLLECTION } from './../../utils'
 import update from 'immutability-helper';
 
 const styles = theme => ({
@@ -87,6 +87,7 @@ class NewLesson extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleLessonUpload = this.handleLessonUpload.bind(this)
     this.handleBadgeOnclick = this.handleBadgeOnclick.bind(this)
+    this.fetchNexLessonNumber = this.fetchNexLessonNumber.bind(this)
   }
 
   handleDialogClose = () => {
@@ -107,10 +108,32 @@ class NewLesson extends Component {
       lesson: { [name]: { $set: name == "timestamp" ? new Date(value) : value } },
     })
     this.setState(newState);
+
+    if (name == "session") {
+      this.fetchNexLessonNumber(value)
+    }
+  }
+
+  fetchNexLessonNumber = (session) => {
+    console.log("Fetching Lesson Number for session: ", session)
+    fireStoreDb.collection(BOOKS_COLLECTION)
+      .doc(session)
+      .collection(LESSONS_COLLECTION)
+      .get()
+      .then((querySnapshot) => {
+        let count = querySnapshot.size
+        console.log("Lessons count: ", count)
+        const newState = update(this.state, {
+          lesson: { number: { $set: count + 1 } },
+        })
+        this.setState(newState);
+      }).catch((error) => {
+        console.log("Error getting Lesson count: ", error)
+      })
   }
 
   handleLessonUpload = event => {
-    console.log("Handing Lesson Upload Here: ", event.target)
+    console.log("Handling Lesson Upload Here: ", event.target)
     console.log("Lessons: ", this.state.lesson)
   }
   componentDidMount() {
