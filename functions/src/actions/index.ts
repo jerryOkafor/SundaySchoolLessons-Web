@@ -5,7 +5,7 @@ nunjucks.configure({ autoescape: true });
 //get the  node mailer
 import nodeMailer = require('nodemailer');
 
-import { BOOKS_COLLECTION, LESSONS_COLLECTION, READERS_COLLECTION } from "../Constants"
+import { BOOKS_COLLECTION, LESSONS_COLLECTION, READERS_COLLECTION } from "../utils"
 
 //import the firestore instance from index
 import { firestoreInstance } from "../index";

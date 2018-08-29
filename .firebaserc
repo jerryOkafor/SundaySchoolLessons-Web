@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "dev-5564e",
-    "prod": "sundayschoollessons-2271f"
+    "prod": "sundayschoollessons-2271f",
+    "staging": "dev-5564e"
   }
 }

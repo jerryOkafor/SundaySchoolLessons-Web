@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin'
 
 //get all the consts
-import { BOOKS_COLLECTION, LESSONS_COLLECTION, READERS_COLLECTION } from "./Constants"
+import { BOOKS_COLLECTION, LESSONS_COLLECTION, READERS_COLLECTION } from "./utils"
 import * as actions from './actions/index'
 import { user } from 'firebase-functions/lib/providers/auth';
 

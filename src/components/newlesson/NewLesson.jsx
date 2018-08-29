@@ -153,11 +153,11 @@ class NewLesson extends Component {
     let name = event.target.name
     let value = event.target.value
     const newState = update(this.state, {
-      lesson: { [name]: { $set: name == "timestamp" ? new Date(value) : value } },
+      lesson: { [name]: { $set: name === "timestamp" ? new Date(value) : value } },
     })
     this.setState(newState);
 
-    if (name == "session") {
+    if (name === "session") {
       this.fetchNexLessonNumber(value)
     }
   }
@@ -318,7 +318,7 @@ class NewLesson extends Component {
   }
 
   componentWillUnmount() {
-    this.registrations.map(unsubscribe => { unsubscribe() })
+    this.registrations.forEach(unsubscribe => { unsubscribe() })
   }
   render() {
     const { classes } = this.props;

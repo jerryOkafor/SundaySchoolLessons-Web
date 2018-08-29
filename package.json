@@ -6,7 +6,7 @@
     "@material-ui/core": "^1.5.1",
     "@material-ui/icons": "^2.0.3",
     "firebase": "^5.3.0",
-    "firebaseui": "^2.6.2",
+    "firebaseui": "^3.1.1",
     "immutability-helper": "^2.6.6",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
@@ -24,9 +24,9 @@
     "validate:dependencies": "nsp check",
     "eject": "react-scripts eject",
     "build:staging": "REACT_APP_DIST_ENV=staging yarn build",
-    "deploy:staging": "yarn build && firebase deploy -P default",
+    "deploy:staging": "yarn build:staging && firebase deploy -P staging",
     "build:production": "REACT_APP_DIST_ENV=production yarn build",
-    "deploy:production": "yarn build && firebase deploy -P prod"
+    "deploy:production": "yarn build:production && firebase deploy -P production"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
