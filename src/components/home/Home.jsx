@@ -72,7 +72,7 @@ function Home(props) {
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
-            <Typography variant="display3" align="center" color="textPrimary" gutterBottom>
+            <Typography variant="display3" align="center" color="textSecondary" gutterBottom>
               Welcome To Sunday School Lessons App
             </Typography>
             <Typography variant="title" align="center" color="textSecondary" paragraph>

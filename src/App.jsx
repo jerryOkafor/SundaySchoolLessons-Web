@@ -48,6 +48,26 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
   },
+  linkIconStyle:{
+
+  },
+  linkTextStyle: {
+    textDecoration: 'none',
+    color: '#ffffffb3',
+    '&:hover': {
+      color: '#d9a201'
+    },
+    '&:active': {
+
+    }
+  },
+  navText: {
+    color: '#ffffffb3'
+  },
+
+  whiteText: {
+    color: '#ffffff'
+  },
   appBar: {
     position: 'absolute',
     marginLeft: drawerWidth,
@@ -66,6 +86,8 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
+    backgroundColor: '#19212b',
+    color: '#ffffff',
     width: drawerWidth,
     height: '100%',
     [theme.breakpoints.up('md')]: {
@@ -114,7 +136,23 @@ function PublicRoute({ component: Component, authed, user, ...rest }) {
   );
 }
 
-const theme = createMuiTheme();
+function getTheme(theme) {
+  return createMuiTheme({
+    palette: {
+      type: theme.paletteType,
+      primary: {
+        main: '#d9a201'
+      },
+      background: {
+        default: theme.paletteType === 'light' ? '#000' : '#fff',
+      },
+    },
+  });
+}
+
+const theme = getTheme({
+  paletteType: 'light',
+});
 
 class App extends Component {
   state = {
@@ -157,7 +195,7 @@ class App extends Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
 
     const drawer = (
       <div>
@@ -179,29 +217,28 @@ class App extends Component {
         </div>
         <Divider />
         <List>
-
           <Link to="/home" >
             <MenuItem className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
-                <HomeIcon />
+                <HomeIcon className={classes.navText} />
               </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary='Home' />
+              <ListItemText classes={{ primary: classes.navText }} inset primary='Home' />
             </MenuItem>
           </Link>
-          <Link to="/new/lesson">
+          <Link to="/new/lesson" className={classes.linkTextStyle}>
             <MenuItem className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
-                <AddIcon />
+                <AddIcon className={classes.navText} />
               </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary='New Lessons' />
+              <ListItemText classes={{ primary: classes.linkTextStyle }} inset primary='New Lessons' />
             </MenuItem>
           </Link>
           <Link to="/new/prepnote">
             <MenuItem className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
-                <AddCircle />
+                <AddCircle className={classes.navText} />
               </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="New Pre Note" />
+              <ListItemText classes={{ primary: classes.navText }} inset primary="New Pre Note" />
             </MenuItem>
           </Link>
         </List>
@@ -210,17 +247,17 @@ class App extends Component {
           <Link to="/about">
             <MenuItem className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
-                <InfoIcon />
+                <InfoIcon className={classes.navText} />
               </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="About" />
+              <ListItemText classes={{ primary: classes.navText }} inset primary="About" />
             </MenuItem>
           </Link>
           <Link to="/contact">
             <MenuItem className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
-                <HelpIcon />
+                <HelpIcon className={classes.navText} />
               </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="Contact Us" />
+              <ListItemText classes={{ primary: classes.navText }} inset primary="Contact Us" />
             </MenuItem>
           </Link>
         </List>
@@ -232,7 +269,7 @@ class App extends Component {
         <BrowserRouter>
           <div className={classes.root}>
             <AppBar className={classes.appBar}>
-              <Toolbar>
+              <Toolbar className={classes.primary}>
                 <IconButton
                   color="inherit"
                   aria-label="Open drawer"
@@ -241,7 +278,7 @@ class App extends Component {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Typography variant="title" color="inherit" noWrap>
+                <Typography variant="title" color="inherit" noWrap className={classes.whiteText}>
                   &nbsp;&nbsp; Sunday Schhool Lessons.
             </Typography>
                 {/* <Button variant="outlined" color="primary">
