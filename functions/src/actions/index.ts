@@ -25,18 +25,24 @@ export async function updateReadersCount(snap, context) {
     const lessonRef = firestoreInstance.collection(BOOKS_COLLECTION)
         .doc(sessionId).collection(LESSONS_COLLECTION).doc(lessonId);
 
-    console.log("Lesson Ref:", lessonRef)
+    console.log("Lesson Ref:", lessonRef.path)
     console.log("Data: ", doc)
 
-    //continue
-    if (snap.exists) {
-        const oldCount = doc.readers
-        const newCount = oldCount + 1
-        await lessonRef.set({ readers: newCount }, { merge: true })
-        console.log("New Redaer added!")
-    } else {
-        console.log("Docuement does not exist")
-    }
+    await lessonRef.get()
+        .then(lesson => {
+            if (!lesson.exists) {
+                console.log("No sush document exist")
+            } else {
+                //Document exit
+                const oldCount = lesson.data().readers || 0
+                const newCount = oldCount + 1
+                lessonRef.set({ readers: newCount }, { merge: true })
+                console.log("New Redaer added!")
 
+            }
+        })
+        .catch(error => {
+            console.log("Error occured in the process.")
+        })
 
 }
