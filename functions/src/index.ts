@@ -7,7 +7,7 @@ import * as actions from './actions/index'
 import { user } from 'firebase-functions/lib/providers/auth';
 
 //init the firebase app
-admin.initializeApp(functions.config().firebase)
+admin.initializeApp()
 
 //export the instance of firestore from firebase app
 export const firestoreInstance = admin.firestore()

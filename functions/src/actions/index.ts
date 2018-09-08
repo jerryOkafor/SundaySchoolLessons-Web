@@ -18,23 +18,22 @@ export async function onNewUserCreated(user) {
 }
 
 export async function updateReadersCount(snap, context) {
-    const data = snap.data() //the newly written data
+    const doc = snap.data() //the newly written data
     const lessonId = context.params.lessonId //event param lessonId
     const sessionId = context.params.sessionId //event param sessionId
 
     const lessonRef = firestoreInstance.collection(BOOKS_COLLECTION)
         .doc(sessionId).collection(LESSONS_COLLECTION).doc(lessonId);
 
-    const doc = await lessonRef.get()
+    console.log("Lesson Ref:", lessonRef)
+    console.log("Data: ", doc)
 
     //continue
-    if (doc.exists) {
-        const oldCount = doc.data().readers
+    if (snap.exists) {
+        const oldCount = doc.readers
         const newCount = oldCount + 1
-
-        await lessonRef.set({
-            readers: newCount
-        }, { merge: true })
+        await lessonRef.set({ readers: newCount }, { merge: true })
+        console.log("New Redaer added!")
     } else {
         console.log("Docuement does not exist")
     }
