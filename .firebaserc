@@ -1,6 +1,5 @@
 {
   "projects": {
-    "staging": "dev-5564e",
-    "production": "sundayschoollessons-2271f"
+    "prod": "quizapp-ui"
   }
 }
