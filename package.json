@@ -27,8 +27,8 @@
     "deploy:staging": "yarn build:staging && firebase deploy -P staging",
     "deploy:functions:staging": "firebase deploy --only functions -P staging",
     "build:production": "REACT_APP_DIST_ENV=production yarn build",
-    "deploy:production": "yarn build:production && firebase deploy -P production",
-    "deploy:functions:production": "firebase deploy --only functions -P production"
+    "deploy:production": "yarn build:production && firebase deploy -P prod",
+    "deploy:functions:production": "firebase deploy --only functions -P prod"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
